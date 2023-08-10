@@ -38,19 +38,16 @@ namespace webapi_nextflow.Entity
         [Column(name: "specific_status_id")]
         public int SpecificStatusId { get; set; }
 
-        // start navigation property     
         [ForeignKey("Id")]
-        public  Item Item { get; set; } = null!;
+        public  virtual Item Item { get; set; } = null!;
 
-        public ApprovalType ApprovalType { get; set; }
-      
-        //participant_type_id
-               
+        public virtual ApprovalType ApprovalType { get; set; } = null!;
+
         public Group Group { get; set; }
 
-        public  SpecificStatus SpecificStatus { get; set; }
+        public virtual ParticipantType ParticipantType { get; set; } = null!;
 
-        // end navigation property     
-        
+        public  virtual SpecificStatus SpecificStatus { get; set; }
+
     }
 }

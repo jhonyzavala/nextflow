@@ -12,8 +12,10 @@ namespace webapi_nextflow.Entity
 
         [Required]
         [Column(name:"expression")]
+        [StringLength(maximumLength:255)]
         public string Expression { get; set; } = null!;
 
-        public Item IdNavigation { get; set; } = null!;
+        [ForeignKey("Id")]
+        public virtual Item IdNavigation { get; set; } = null!;
     }
 }

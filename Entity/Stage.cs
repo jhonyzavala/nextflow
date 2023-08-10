@@ -25,8 +25,8 @@ namespace webapi_nextflow.Entity
         [StringLength(maximumLength: 128)]
         [Column(name: "workflow_id")]
         public string WorkflowId { get; set; }
-
-        public Workflow Workflow { get; set; }
+        public virtual List<Item> Items { get; set; }
+        public virtual Workflow Workflow { get; set; }
 
     }
 }

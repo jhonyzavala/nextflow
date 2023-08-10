@@ -18,7 +18,7 @@ namespace webapi_nextflow.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Entity.Task>>> Get()
         {
-            return await context.Tasks.ToListAsync();
+          return await context.Tasks.ToListAsync();
         }
 
         [HttpGet("{id:int}")]

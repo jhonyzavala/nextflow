@@ -21,7 +21,12 @@ namespace webapi_nextflow.Entity
         [Column(name: "owner")]
         public string Owner { get; set; }
 
-        public List<Item> Items { get; set; }
+        public virtual List<Group> Groups { get; set; }
 
+        public virtual List<Item> Items { get; set; }
+
+        public virtual List<SpecificStatus> SpecificStatuses { get; set; } 
+
+        public virtual List<Stage> Stages { get; set; } 
     }
 }

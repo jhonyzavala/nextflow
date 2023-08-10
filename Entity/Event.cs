@@ -5,26 +5,25 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace webapi_nextflow.Entity;
 
-[Table(name:"participant_type")]
-public partial class ParticipantType
+[Table(name:"event")]
+public partial class Event
 {
-    
+
     [Required]
     [Column(name:"id")]
     public int Id { get; set; }
 
     [Required]
-    [StringLength(maximumLength:150)]
     [Column(name:"name")]
+    [StringLength(maximumLength:100)]
     public string Name { get; set; } = null!;
 
     [Required]
-    [StringLength(maximumLength:300)]
     [Column(name:"description")]
+    [StringLength(maximumLength:150)]
     public string Description { get; set; } = null!;
 
-    [Column(name:"order")]
-    public int Order { get; set; }
+    public virtual List<Transition> Transitions { get; set; } 
 
-    public virtual List<Task> Tasks { get; set; } 
+
 }

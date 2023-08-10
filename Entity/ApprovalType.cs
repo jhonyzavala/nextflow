@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace webapi_nextflow.Entity;
 
-[Table(name:"approvaltype")]
+[Table(name:"approval_type")]
 public partial class ApprovalType
 {
     
@@ -19,11 +19,11 @@ public partial class ApprovalType
     public string Name { get; set; } = null!;
 
     [Required]
-    [Column(name:"name")]
+    [Column(name:"description")]
     [StringLength(maximumLength:300)]
     public string Description { get; set; } = null!;
 
     public int Order { get; set; }
 
-    public List<Task> Tasks { get; set; } 
+    public virtual List<Task> Tasks { get; set; } 
 }

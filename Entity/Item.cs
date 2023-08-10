@@ -26,7 +26,6 @@ namespace webapi_nextflow.Entity
         [Column(name: "workflow_id")]
         public string WorkflowId { get; set; }
   
-
         [Required]
         [Column(name: "stage_id")]
         public int StageId { get; set; }
@@ -44,10 +43,17 @@ namespace webapi_nextflow.Entity
         [NotMapped]
         public int Greater { get; set; }
         
-        // start navigation property        
-        public Workflow Workflow { get; set; }
-        public Stage Stage { get; set; }
-        // end navigation property
+        public virtual Conditional Conditional { get; set; }
+
+        public virtual Stage Stage { get; set; } = null!;
+
+        public virtual Task Task { get; set; }
+
+       // public virtual List<Transition> TransitionCurrentItemNavigations { get; set; }
+
+        //public virtual List<Transition> TransitionNextItemNavigations { get; set; } 
+
+        public virtual Workflow Workflow { get; set; } = null!;
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

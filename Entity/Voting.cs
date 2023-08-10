@@ -9,6 +9,7 @@ namespace webapi_nextflow.Entity;
 public partial class Voting
 {
     [Column(name:"id")]
+    [StringLength(maximumLength:128)]
     public string Id { get; set; } = null!;
 
     [Required]
@@ -26,8 +27,6 @@ public partial class Voting
 
     [Column(name:"close_voting")]
     public bool? CloseVoting { get; set; }   
-
-    // Navegation property
-    public Task Task { get; set; } 
+    public virtual List<WorkFlowItem> WorkFlowItems { get; set; }
   
 }
