@@ -42,10 +42,10 @@ namespace webapi_nextflow.Entity
         [ForeignKey("Id")]
         public  Item Item { get; set; } = null!;
 
-        //approval_type_id
+        public ApprovalType ApprovalType { get; set; }
+      
         //participant_type_id
-        
-        
+               
         public Group Group { get; set; }
 
         public  SpecificStatus SpecificStatus { get; set; }
