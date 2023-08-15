@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace webapi_nextflow.Entity;
 
-[Table(name:"event")]
+[Table(name:"events")]
 public partial class Event
 {
 

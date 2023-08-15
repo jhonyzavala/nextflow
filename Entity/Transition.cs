@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace webapi_nextflow.Entity;
 
 [Table(name:"transition")]
+[Index(nameof(CurrentItem), nameof(NextItem), nameof(EventId), IsUnique =true )]
 public partial class Transition
 {
     
@@ -14,11 +16,13 @@ public partial class Transition
 
     [Required]
     [Column(name:"current_item")]    
+    [ForeignKey("CurrentItemNavigation")]
     public int CurrentItem { get; set; }
 
     [Required]
     [Column(name:"next_item")]    
-    public int NextItem { get; set; }
+    [ForeignKey("NextItemNavigation")]
+     public int NextItem { get; set; }
 
     [Required]
     [Column(name:"event_id")]    

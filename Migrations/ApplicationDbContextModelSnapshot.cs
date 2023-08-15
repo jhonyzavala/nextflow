@@ -90,7 +90,7 @@ namespace webapi_nextflow.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("event");
+                    b.ToTable("events");
                 });
 
             modelBuilder.Entity("webapi_nextflow.Entity.Group", b =>
@@ -392,9 +392,6 @@ namespace webapi_nextflow.Migrations
                         .HasColumnType("int")
                         .HasColumnName("current_item");
 
-                    b.Property<int?>("CurrentItemNavigationId")
-                        .HasColumnType("int");
-
                     b.Property<int>("EventId")
                         .HasColumnType("int")
                         .HasColumnName("event_id");
@@ -403,16 +400,14 @@ namespace webapi_nextflow.Migrations
                         .HasColumnType("int")
                         .HasColumnName("next_item");
 
-                    b.Property<int?>("NextItemNavigationId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("CurrentItemNavigationId");
 
                     b.HasIndex("EventId");
 
-                    b.HasIndex("NextItemNavigationId");
+                    b.HasIndex("NextItem");
+
+                    b.HasIndex("CurrentItem", "NextItem", "EventId")
+                        .IsUnique();
 
                     b.ToTable("transition");
                 });
@@ -641,7 +636,9 @@ namespace webapi_nextflow.Migrations
                 {
                     b.HasOne("webapi_nextflow.Entity.Item", "CurrentItemNavigation")
                         .WithMany()
-                        .HasForeignKey("CurrentItemNavigationId");
+                        .HasForeignKey("CurrentItem")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("webapi_nextflow.Entity.Event", "Event")
                         .WithMany("Transitions")
@@ -651,7 +648,9 @@ namespace webapi_nextflow.Migrations
 
                     b.HasOne("webapi_nextflow.Entity.Item", "NextItemNavigation")
                         .WithMany()
-                        .HasForeignKey("NextItemNavigationId");
+                        .HasForeignKey("NextItem")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("CurrentItemNavigation");
 
