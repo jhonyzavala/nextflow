@@ -1,16 +1,12 @@
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace webapi_nextflow.Entity;
+namespace webapi_nextflow.DTOs;
 
-[Table(name:"groups")]
-public class Group
-{
-    
-    [Column(name:"id")]
-    public int Id { get; set; }
+public class GroupsCreateDTO{
 
     [Required]
     [Column(name:"name")]
@@ -26,14 +22,4 @@ public class Group
     [Column(name:"order")]
     public int Order { get; set; }
 
-    [Required]
-    [Column(name:"workflow_id")]
-    [StringLength(maximumLength:128)]
-    public string WorkflowId { get; set; } = null!;
-
-    public virtual List<GroupsUser> GroupsUsers { get; set; }
-
-    public virtual List<Task> Tasks { get; set; }
-
-    public virtual Workflow Workflow { get; set; } = null!;
 }

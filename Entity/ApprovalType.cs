@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace webapi_nextflow.Entity;
 
 [Table(name:"approval_type")]
-public partial class ApprovalType
+public class ApprovalType
 {
     
     [Required]

@@ -46,6 +46,41 @@ namespace webapi_nextflow.Controllers
             return Ok();
         }
 
+        [HttpPut("{id}")] // api/workflows/1 
+        public async Task<ActionResult> Put(Workflow workflow, string id)
+        {
+            if (workflow.Id != id)
+            {
+                return BadRequest("The workflow id does not match the url id");
+            }
+
+            var exists = await context.Workflows.AnyAsync(x => x.Id == id);
+
+            if (!exists)
+            {
+                return NotFound();
+            }
+
+            context.Update(workflow);
+            await context.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpDelete("{id}")] // api/workflows/2
+        public async Task<ActionResult> Delete(string id)
+        {
+            var exists = await context.Workflows.AnyAsync(x => x.Id == id);
+
+            if (!exists)
+            {
+                return NotFound();
+            }
+
+            context.Remove(new Workflow() { Id = id });
+            await context.SaveChangesAsync();
+            return Ok();
+        }
+
 
     }
 }

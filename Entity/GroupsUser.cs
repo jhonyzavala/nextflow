@@ -8,7 +8,7 @@ namespace webapi_nextflow.Entity;
 
 [Table(name:"groups_user")]
 [PrimaryKey(nameof(GroupId), nameof(UserId))]
-public partial class GroupsUser
+public class GroupsUser
 {
     
     [Required]

@@ -27,7 +27,7 @@ namespace webapi_nextflow.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "event",
+                name: "events",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "int", nullable: false)
@@ -37,7 +37,7 @@ namespace webapi_nextflow.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_event", x => x.id);
+                    table.PrimaryKey("PK_events", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -234,7 +234,8 @@ namespace webapi_nextflow.Migrations
                         name: "FK_items_stages_stage_id",
                         column: x => x.stage_id,
                         principalTable: "stages",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_items_workflows_workflow_id",
                         column: x => x.workflow_id,
@@ -303,8 +304,7 @@ namespace webapi_nextflow.Migrations
                         name: "FK_task_specific_status_specific_status_id",
                         column: x => x.specific_status_id,
                         principalTable: "specific_status",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -315,27 +315,25 @@ namespace webapi_nextflow.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     current_item = table.Column<int>(type: "int", nullable: false),
                     next_item = table.Column<int>(type: "int", nullable: false),
-                    event_id = table.Column<int>(type: "int", nullable: false),
-                    CurrentItemNavigationId = table.Column<int>(type: "int", nullable: true),
-                    NextItemNavigationId = table.Column<int>(type: "int", nullable: true)
+                    event_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_transition", x => x.id);
                     table.ForeignKey(
-                        name: "FK_transition_event_event_id",
+                        name: "FK_transition_events_event_id",
                         column: x => x.event_id,
-                        principalTable: "event",
+                        principalTable: "events",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_transition_items_CurrentItemNavigationId",
-                        column: x => x.CurrentItemNavigationId,
+                        name: "FK_transition_items_current_item",
+                        column: x => x.current_item,
                         principalTable: "items",
                         principalColumn: "id");
                     table.ForeignKey(
-                        name: "FK_transition_items_NextItemNavigationId",
-                        column: x => x.NextItemNavigationId,
+                        name: "FK_transition_items_next_item",
+                        column: x => x.next_item,
                         principalTable: "items",
                         principalColumn: "id");
                 });
@@ -386,9 +384,10 @@ namespace webapi_nextflow.Migrations
                 column: "specific_status_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_transition_CurrentItemNavigationId",
+                name: "IX_transition_current_item_next_item_event_id",
                 table: "transition",
-                column: "CurrentItemNavigationId");
+                columns: new[] { "current_item", "next_item", "event_id" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_transition_event_id",
@@ -396,9 +395,9 @@ namespace webapi_nextflow.Migrations
                 column: "event_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_transition_NextItemNavigationId",
+                name: "IX_transition_next_item",
                 table: "transition",
-                column: "NextItemNavigationId");
+                column: "next_item");
 
             migrationBuilder.CreateIndex(
                 name: "IX_work_flow_items_status_item_flow_id",
@@ -442,7 +441,7 @@ namespace webapi_nextflow.Migrations
                 name: "specific_status");
 
             migrationBuilder.DropTable(
-                name: "event");
+                name: "events");
 
             migrationBuilder.DropTable(
                 name: "items");

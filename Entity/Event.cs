@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace webapi_nextflow.Entity;
 
 [Table(name:"events")]
-public partial class Event
+public class Event
 {
 
     [Required]
@@ -24,6 +24,5 @@ public partial class Event
     public string Description { get; set; } = null!;
 
     public virtual List<Transition> Transitions { get; set; } 
-
 
 }

@@ -5,7 +5,7 @@ using webapi_nextflow.Entity;
 namespace webapi_nextflow.Controllers
 {
     [ApiController]
-    [Route("api/items")]
+    [Route("api/workflows/{workflowid}/items")]
     public class ItemsController : ControllerBase
     {
         private readonly ApplicationDbContext context;
@@ -16,9 +16,16 @@ namespace webapi_nextflow.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Item>>> Get()
+        public async Task<ActionResult<List<Item>>> Get(string workflowid)
         {
-            return await context.Items.ToListAsync();
+            var exists = await context.Workflows.AnyAsync(x => x.Id == workflowid);
+
+            if (!exists)
+            {
+                return BadRequest($"Workflow with Id {workflowid} does not exist ");
+            }
+            
+            return await context.Items.Where(a=>a.WorkflowId==workflowid).ToListAsync();
         }
 
        // [HttpGet("nextitem/{id:int}/{event:int}")]

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace webapi_nextflow.Entity
 {
     [Table(name:"conditional")]
-    public partial class Conditional
+    public class Conditional
     {
         [Required]
         public int Id { get; set; }
