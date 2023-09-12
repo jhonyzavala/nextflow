@@ -22,7 +22,7 @@ namespace webapi_nextflow.Controllers
             return await context.Workflows.ToListAsync();
         }
 
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<Workflow>> Get( string id)
         {
             var workflow = await context.Workflows.Include(a=>a.Items).FirstOrDefaultAsync(x => x.Id == id);

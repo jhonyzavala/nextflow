@@ -40,6 +40,10 @@ namespace webapi_nextflow
 
         public virtual DbSet<Workflow> Workflows { get; set; }
         
+        public virtual DbSet<Participant> Participants { get; set; }
+        
+        public virtual DbSet<Collaborator> Collaborators { get; set; }
+
         
     }
 }

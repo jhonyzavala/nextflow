@@ -79,8 +79,8 @@ namespace webapi_nextflow.Controllers
             return Ok();
         }
 
-        [HttpPut("{id}")] // api/workflows/{workflowid}/groups/1 
-        public async Task<ActionResult> Put(string workflowid, GroupsCreateDTO groupCreateDTO, int id)
+        [HttpPut("{id:int}")] // api/workflows/{workflowid}/groups/1 
+        public async Task<ActionResult> Put(string workflowid, int id, GroupsCreateDTO groupCreateDTO)
         {
  
             var existsWorkflow = await context.Workflows.AnyAsync(x => x.Id == workflowid);
@@ -113,7 +113,7 @@ namespace webapi_nextflow.Controllers
             return Ok();
         }
 
-        [HttpDelete("{id}")] // api/workflows/{workflowid}/groups/1 
+        [HttpDelete("{id:int}")] // api/workflows/{workflowid}/groups/1 
         public async Task<ActionResult> Delete(int id)
         {
             var exists = await context.Groups.AnyAsync(x => x.Id == id);
@@ -126,7 +126,9 @@ namespace webapi_nextflow.Controllers
             context.Remove(new Group() { Id = id });
             await context.SaveChangesAsync();
             return Ok();
-        }        
+        }  
+   
+             
 
     }
 }

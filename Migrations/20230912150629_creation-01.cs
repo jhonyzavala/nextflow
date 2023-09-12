@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace webapi_nextflow.Migrations
 {
     /// <inheritdoc />
-    public partial class complemento_01 : Migration
+    public partial class creation01 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,8 +15,7 @@ namespace webapi_nextflow.Migrations
                 name: "approval_type",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    id = table.Column<int>(type: "int", nullable: false),
                     name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
                     description = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
                     Order = table.Column<int>(type: "int", nullable: false)
@@ -44,8 +43,7 @@ namespace webapi_nextflow.Migrations
                 name: "participant_type",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    id = table.Column<int>(type: "int", nullable: false),
                     name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
                     description = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
                     order = table.Column<int>(type: "int", nullable: false)
@@ -262,7 +260,7 @@ namespace webapi_nextflow.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "task",
+                name: "tasks",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "int", nullable: false),
@@ -276,32 +274,32 @@ namespace webapi_nextflow.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_task", x => x.id);
+                    table.PrimaryKey("PK_tasks", x => x.id);
                     table.ForeignKey(
-                        name: "FK_task_approval_type_approval_type_id",
+                        name: "FK_tasks_approval_type_approval_type_id",
                         column: x => x.approval_type_id,
                         principalTable: "approval_type",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_task_groups_group_id",
+                        name: "FK_tasks_groups_group_id",
                         column: x => x.group_id,
                         principalTable: "groups",
                         principalColumn: "id");
                     table.ForeignKey(
-                        name: "FK_task_items_id",
+                        name: "FK_tasks_items_id",
                         column: x => x.id,
                         principalTable: "items",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_task_participant_type_participant_type_id",
+                        name: "FK_tasks_participant_type_participant_type_id",
                         column: x => x.participant_type_id,
                         principalTable: "participant_type",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_task_specific_status_specific_status_id",
+                        name: "FK_tasks_specific_status_specific_status_id",
                         column: x => x.specific_status_id,
                         principalTable: "specific_status",
                         principalColumn: "id");
@@ -338,6 +336,47 @@ namespace webapi_nextflow.Migrations
                         principalColumn: "id");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "collaborators",
+                columns: table => new
+                {
+                    collaborator_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    task_id = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_collaborators", x => new { x.collaborator_id, x.task_id });
+                    table.ForeignKey(
+                        name: "FK_collaborators_tasks_task_id",
+                        column: x => x.task_id,
+                        principalTable: "tasks",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "participants",
+                columns: table => new
+                {
+                    participant_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    task_id = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_participants", x => new { x.participant_id, x.task_id });
+                    table.ForeignKey(
+                        name: "FK_participants_tasks_task_id",
+                        column: x => x.task_id,
+                        principalTable: "tasks",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_collaborators_task_id",
+                table: "collaborators",
+                column: "task_id");
+
             migrationBuilder.CreateIndex(
                 name: "IX_groups_workflow_id",
                 table: "groups",
@@ -354,6 +393,11 @@ namespace webapi_nextflow.Migrations
                 column: "workflow_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_participants_task_id",
+                table: "participants",
+                column: "task_id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_specific_status_workflow_id",
                 table: "specific_status",
                 column: "workflow_id");
@@ -364,23 +408,23 @@ namespace webapi_nextflow.Migrations
                 column: "workflow_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_task_approval_type_id",
-                table: "task",
+                name: "IX_tasks_approval_type_id",
+                table: "tasks",
                 column: "approval_type_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_task_group_id",
-                table: "task",
+                name: "IX_tasks_group_id",
+                table: "tasks",
                 column: "group_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_task_participant_type_id",
-                table: "task",
+                name: "IX_tasks_participant_type_id",
+                table: "tasks",
                 column: "participant_type_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_task_specific_status_id",
-                table: "task",
+                name: "IX_tasks_specific_status_id",
+                table: "tasks",
                 column: "specific_status_id");
 
             migrationBuilder.CreateIndex(
@@ -414,13 +458,16 @@ namespace webapi_nextflow.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "collaborators");
+
+            migrationBuilder.DropTable(
                 name: "conditional");
 
             migrationBuilder.DropTable(
                 name: "groups_user");
 
             migrationBuilder.DropTable(
-                name: "task");
+                name: "participants");
 
             migrationBuilder.DropTable(
                 name: "transition");
@@ -429,28 +476,31 @@ namespace webapi_nextflow.Migrations
                 name: "work_flow_items");
 
             migrationBuilder.DropTable(
-                name: "approval_type");
-
-            migrationBuilder.DropTable(
-                name: "groups");
-
-            migrationBuilder.DropTable(
-                name: "participant_type");
-
-            migrationBuilder.DropTable(
-                name: "specific_status");
+                name: "tasks");
 
             migrationBuilder.DropTable(
                 name: "events");
-
-            migrationBuilder.DropTable(
-                name: "items");
 
             migrationBuilder.DropTable(
                 name: "status_flow_items");
 
             migrationBuilder.DropTable(
                 name: "voting");
+
+            migrationBuilder.DropTable(
+                name: "approval_type");
+
+            migrationBuilder.DropTable(
+                name: "groups");
+
+            migrationBuilder.DropTable(
+                name: "items");
+
+            migrationBuilder.DropTable(
+                name: "participant_type");
+
+            migrationBuilder.DropTable(
+                name: "specific_status");
 
             migrationBuilder.DropTable(
                 name: "stages");

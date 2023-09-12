@@ -12,8 +12,8 @@ using webapi_nextflow;
 namespace webapi_nextflow.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230811195045_complemento_01")]
-    partial class complemento_01
+    [Migration("20230912150629_creation-01")]
+    partial class creation01
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,11 +28,8 @@ namespace webapi_nextflow.Migrations
             modelBuilder.Entity("webapi_nextflow.Entity.ApprovalType", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -52,6 +49,23 @@ namespace webapi_nextflow.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("approval_type");
+                });
+
+            modelBuilder.Entity("webapi_nextflow.Entity.Collaborator", b =>
+                {
+                    b.Property<string>("CollaboratorId")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("collaborator_id");
+
+                    b.Property<int>("TaskId")
+                        .HasColumnType("int")
+                        .HasColumnName("task_id");
+
+                    b.HasKey("CollaboratorId", "TaskId");
+
+                    b.HasIndex("TaskId");
+
+                    b.ToTable("collaborators");
                 });
 
             modelBuilder.Entity("webapi_nextflow.Entity.Conditional", b =>
@@ -197,14 +211,28 @@ namespace webapi_nextflow.Migrations
                     b.ToTable("items");
                 });
 
+            modelBuilder.Entity("webapi_nextflow.Entity.Participant", b =>
+                {
+                    b.Property<string>("ParticipantId")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("participant_id");
+
+                    b.Property<int>("TaskId")
+                        .HasColumnType("int")
+                        .HasColumnName("task_id");
+
+                    b.HasKey("ParticipantId", "TaskId");
+
+                    b.HasIndex("TaskId");
+
+                    b.ToTable("participants");
+                });
+
             modelBuilder.Entity("webapi_nextflow.Entity.ParticipantType", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -379,7 +407,7 @@ namespace webapi_nextflow.Migrations
 
                     b.HasIndex("SpecificStatusId");
 
-                    b.ToTable("task");
+                    b.ToTable("tasks");
                 });
 
             modelBuilder.Entity("webapi_nextflow.Entity.Transition", b =>
@@ -520,6 +548,17 @@ namespace webapi_nextflow.Migrations
                     b.ToTable("workflows");
                 });
 
+            modelBuilder.Entity("webapi_nextflow.Entity.Collaborator", b =>
+                {
+                    b.HasOne("webapi_nextflow.Entity.Task", "Task")
+                        .WithMany("Collaborators")
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Task");
+                });
+
             modelBuilder.Entity("webapi_nextflow.Entity.Conditional", b =>
                 {
                     b.HasOne("webapi_nextflow.Entity.Item", "IdNavigation")
@@ -570,6 +609,17 @@ namespace webapi_nextflow.Migrations
                     b.Navigation("Stage");
 
                     b.Navigation("Workflow");
+                });
+
+            modelBuilder.Entity("webapi_nextflow.Entity.Participant", b =>
+                {
+                    b.HasOne("webapi_nextflow.Entity.Task", "Task")
+                        .WithMany("Participants")
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Task");
                 });
 
             modelBuilder.Entity("webapi_nextflow.Entity.SpecificStatus", b =>
@@ -721,6 +771,13 @@ namespace webapi_nextflow.Migrations
             modelBuilder.Entity("webapi_nextflow.Entity.StatusFlowItem", b =>
                 {
                     b.Navigation("WorkFlowItems");
+                });
+
+            modelBuilder.Entity("webapi_nextflow.Entity.Task", b =>
+                {
+                    b.Navigation("Collaborators");
+
+                    b.Navigation("Participants");
                 });
 
             modelBuilder.Entity("webapi_nextflow.Entity.Voting", b =>

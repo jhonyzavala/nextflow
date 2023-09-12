@@ -10,7 +10,13 @@ public class AutoMapperProfiles : Profile
     public AutoMapperProfiles()
     {
         CreateMap<GroupsCreateDTO, Group>();
+
+        CreateMap<ItemCreateDTO,Item>();
+        CreateMap<Item,ItemDTO>();
         
+        CreateMap<TaskCreateDTO, Entity.Task>();            
+        CreateMap<Entity.Task, TaskDTO>();
+               
     }
 }
 

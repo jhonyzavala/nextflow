@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace webapi_nextflow.Entity
 {
-    [Table(name:"task")]
+    [Table(name:"tasks")]
     public class Task
     {
         
@@ -47,7 +47,8 @@ namespace webapi_nextflow.Entity
 
         public virtual ParticipantType ParticipantType { get; set; } = null!;
 
-        public  virtual SpecificStatus SpecificStatus { get; set; }
-
+        public virtual SpecificStatus SpecificStatus { get; set; }
+        public virtual List<Participant> Participants { get; set; }
+        public virtual List<Collaborator> Collaborators { get; set; }
     }
 }
