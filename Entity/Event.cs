@@ -11,6 +11,7 @@ public class Event
 
     [Required]
     [Column(name:"id")]
+    [DatabaseGenerated(DatabaseGeneratedOption.None)]
     public int Id { get; set; }
 
     [Required]

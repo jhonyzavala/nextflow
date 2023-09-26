@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using webapi_nextflow.Entity;
+using webapi_nextflow.DTOs;
 
 namespace webapi_nextflow.Controllers
 {
@@ -10,20 +12,25 @@ namespace webapi_nextflow.Controllers
     {
 
         public ApplicationDbContext context { get; }
+        public IMapper mapper { get; }
 
-        public WorkflowController(ApplicationDbContext context)
+        public WorkflowController(ApplicationDbContext context, IMapper mapper)
         {
             this.context = context;
+            this. mapper = mapper;
         }               
 
         [HttpGet]
-        public async Task<ActionResult<List<Workflow>>> Get()
+        public async Task<ActionResult<List<WorkflowDTO>>> Get()
         {
-            return await context.Workflows.ToListAsync();
+            // filtered by the author
+            var workflows = await context.Workflows.ToListAsync();
+
+            return mapper.Map<List<WorkflowDTO>>(workflows);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Workflow>> Get( string id)
+        public async Task<ActionResult<WorkflowDTO>> Get( string id)
         {
             var workflow = await context.Workflows.Include(a=>a.Items).FirstOrDefaultAsync(x => x.Id == id);
 
@@ -31,25 +38,25 @@ namespace webapi_nextflow.Controllers
             {
                 return NotFound();
             }
-
-            return Ok(workflow);
+            
+            return mapper.Map<WorkflowDTO>(workflow);
         }
 
 
         [HttpPost]
-        public async Task<ActionResult> Post( Workflow workflow )
+        public async Task<ActionResult> Post( WorkflowCreateDTO workflowCreateDTO )
         {
-            workflow.Id = Guid.NewGuid().ToString();
-            context.Add(workflow);
+            workflowCreateDTO.Id = Guid.NewGuid().ToString();
+            context.Add(workflowCreateDTO);
             await context.SaveChangesAsync();
 
             return Ok();
         }
 
         [HttpPut("{id}")] // api/workflows/1 
-        public async Task<ActionResult> Put(Workflow workflow, string id)
+        public async Task<ActionResult> Put(WorkflowCreateDTO workflowCreateDTO, string id)
         {
-            if (workflow.Id != id)
+            if (workflowCreateDTO.Id != id)
             {
                 return BadRequest("The workflow id does not match the url id");
             }
@@ -61,7 +68,7 @@ namespace webapi_nextflow.Controllers
                 return NotFound();
             }
 
-            context.Update(workflow);
+            context.Update(workflowCreateDTO);
             await context.SaveChangesAsync();
             return Ok();
         }

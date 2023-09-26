@@ -1,26 +1,39 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Diagnostics;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using webapi_nextflow.Entity;
+using webapi_nextflow.DTOs;
 
 namespace webapi_nextflow.Controllers
 {
     [ApiController]
-    [Route("api/stages")]
+    [Route("api/workflows/{workflowid}/stages")]
     public class StagesController : ControllerBase
     {
-        public ApplicationDbContext context { get; }
+        private readonly ApplicationDbContext context;
+        private readonly IMapper mapper;
 
-        public StagesController( ApplicationDbContext context)
+        public StagesController( ApplicationDbContext context, IMapper mapper )
         {
             this.context = context;
+            this.mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Stage>>> Get()
+        public async Task<ActionResult<List<StageDTO>>> Get( string workflowid )
         {
-            return await context.Stages.ToListAsync();
+            var exists = await context.Workflows.AnyAsync(x => x.Id == workflowid);
+
+            if (!exists)
+            {
+                return BadRequest($"Workflow with Id {workflowid} does not exist ");
+            }
+            
+            var stages = await context.Stages.ToListAsync();
+            
+            return mapper.Map<List<StageDTO>>(stages);
         }
 
         [HttpGet("{id:int}")]
