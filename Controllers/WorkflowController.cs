@@ -47,7 +47,9 @@ namespace webapi_nextflow.Controllers
         public async Task<ActionResult> Post( WorkflowCreateDTO workflowCreateDTO )
         {
             workflowCreateDTO.Id = Guid.NewGuid().ToString();
-            context.Add(workflowCreateDTO);
+
+            var workflow = mapper.Map<Workflow>(workflowCreateDTO);      
+            context.Add(workflow);
             await context.SaveChangesAsync();
 
             return Ok();
@@ -68,7 +70,10 @@ namespace webapi_nextflow.Controllers
                 return NotFound();
             }
 
-            context.Update(workflowCreateDTO);
+            var workflow = mapper.Map<Workflow>(workflowCreateDTO);          
+            workflow.Id=id; 
+
+            context.Update(workflow);
             await context.SaveChangesAsync();
             return Ok();
         }
