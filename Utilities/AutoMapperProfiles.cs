@@ -36,6 +36,9 @@ public class AutoMapperProfiles : Profile
         CreateMap<WorkFlowItemCreateDTO, WorkFlowItem>();
         CreateMap<WorkFlowItem, WorkFlowItemDTO>();
 
+        CreateMap<TransitionCreateDTO, Transition>();
+        CreateMap<Transition, TransitionDTO>();
+
     }
 }
 
