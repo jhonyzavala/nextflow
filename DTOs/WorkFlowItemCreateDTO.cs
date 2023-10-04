@@ -8,7 +8,7 @@ namespace webapi_nextflow.DTOs;
 public partial class WorkFlowItemCreateDTO
 {
     
-    public string Id { get; set; } = null!;
+   // public string Id { get; set; } = null!;
 
     [Required]
     public int TransitionId { get; set; }
