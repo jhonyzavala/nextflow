@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace webapi_nextflow.Migrations
 {
     /// <inheritdoc />
-    public partial class creation1 : Migration
+    public partial class cretion01 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -231,14 +231,12 @@ namespace webapi_nextflow.Migrations
                         name: "FK_items_stages_stage_id",
                         column: x => x.stage_id,
                         principalTable: "stages",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                     table.ForeignKey(
                         name: "FK_items_workflows_workflow_id",
                         column: x => x.workflow_id,
                         principalTable: "workflows",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -323,20 +321,17 @@ namespace webapi_nextflow.Migrations
                         name: "FK_transition_events_event_id",
                         column: x => x.event_id,
                         principalTable: "events",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                     table.ForeignKey(
                         name: "FK_transition_items_current_item",
                         column: x => x.current_item,
                         principalTable: "items",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                     table.ForeignKey(
                         name: "FK_transition_items_next_item",
                         column: x => x.next_item,
                         principalTable: "items",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(

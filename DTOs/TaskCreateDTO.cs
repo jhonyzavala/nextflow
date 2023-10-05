@@ -7,6 +7,7 @@ namespace webapi_nextflow.DTOs
     public class TaskCreateDTO
     {
 
+        [Required] 
         public int Id { get; set; }
 
         [Required] 

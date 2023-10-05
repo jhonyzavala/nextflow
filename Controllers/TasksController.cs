@@ -44,9 +44,17 @@ namespace webapi_nextflow.Controllers
 
        
         [HttpGet("{id:int}")] 
-        public async Task<ActionResult<TaskDTO>> Get(int id)
+        public async Task<ActionResult<TaskDTO>> Get(string workflowid, int id)
         {
-            var task = await context.Tasks.FirstOrDefaultAsync(x=>x.Id==id);
+            var exists = await context.Workflows.AnyAsync(x => x.Id == workflowid);
+
+            if (!exists)
+            {
+                return BadRequest($"Workflow with Id {workflowid} does not exist ");
+            }            
+            
+            // Check Sintaxy
+            var task = await context.Tasks.Include(x=>x.Item).FirstOrDefaultAsync(x=>x.Id==id && x.Item.WorkflowId == workflowid);
 
             if (task==null)
             {
@@ -86,7 +94,8 @@ namespace webapi_nextflow.Controllers
                 return BadRequest($"Workflow with Id {workflowid} does not exist ");
             }            
             
-            var exists = await context.Tasks.AnyAsync(x => x.Id == id);
+            // Check Sintaxy
+            var exists = await context.Tasks.Include(x=>x.Item).AnyAsync(x => x.Id == id && x.Item.WorkflowId == workflowid);
 
             if (!exists)
             {
@@ -120,7 +129,8 @@ namespace webapi_nextflow.Controllers
                 return BadRequest($"Workflow with Id {workflowid} does not exist ");
             }                    
 
-            var taskDB = await context.Tasks.FirstOrDefaultAsync(x => x.Id == id);
+            // Check Sintaxy
+            var taskDB = await context.Tasks.Include(x=>x.Item).FirstOrDefaultAsync(x => x.Id == id && x.Item.WorkflowId == workflowid);
 
             if (taskDB == null)
             {
@@ -157,7 +167,7 @@ namespace webapi_nextflow.Controllers
                 return NotFound();
             }                    
 
-            var exists = await context.Tasks.AnyAsync(x => x.Id == id);
+            var exists = await context.Tasks.AnyAsync(x => x.Id == id && x.Item.WorkflowId == workflowid);
 
             if (!exists)
             {

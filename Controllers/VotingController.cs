@@ -23,117 +23,83 @@ namespace webapi_nextflow.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<TaskDTO>>> Get(string workflowid)
+        public async Task<ActionResult<List<VotingDTO>>> Get()
         {
-            var exists = await context.Workflows.AnyAsync(x => x.Id == workflowid);
-
-            if (!exists)
-            {
-                return BadRequest($"Workflow with Id {workflowid} does not exist ");
-            }
-
-
-            var tasks = await (
-                                    from a in context.Tasks
-                                    join b in context.Items on a.Id equals b.Id
-                                    where b.WorkflowId == workflowid
-                                    select a            
-                                ).ToListAsync();
+            var votings = await context.Votings.ToListAsync();
 
                 
-            return mapper.Map<List<TaskDTO>>(tasks);       
+            return mapper.Map<List<VotingDTO>>(votings);       
         }
 
        
-        [HttpGet("{id:int}")] 
-        public async Task<ActionResult<TaskDTO>> Get(int id)
+        [HttpGet("{id}")] 
+        public async Task<ActionResult<VotingDTO>> Get(string id)
         {
-            var task = await context.Tasks.FirstOrDefaultAsync(x=>x.Id==id);
+            var voting = await context.Votings.FirstOrDefaultAsync(x=>x.Id==id);
 
-            if (task==null)
+            if (voting==null)
             {
                 return NotFound();
             }            
 
-            return mapper.Map<TaskDTO>(task);
+            return mapper.Map<VotingDTO>(voting);
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post(string workflowid, TaskCreateDTO taskCreateDTO)
+        public async Task<ActionResult> Post( VotingCreateDTO votingCreateDTO)
         {                        
 
-            var existsWorkflow = await context.Workflows.AnyAsync(x => x.Id == workflowid);
-
-            if (!existsWorkflow)
-            {
-                return BadRequest($"Workflow with Id {workflowid} does not exist ");
-            }
-
-            var task=mapper.Map<Entity.Task>(taskCreateDTO);                
-            context.Add(task);
+            var voting=mapper.Map<Voting>(votingCreateDTO);                
+            context.Add(voting);
             await context.SaveChangesAsync();
 
             return Ok();
         }
 
         
-        [HttpPut("{id:int}")] // api/workflows/{workflowid}/tasks/1 
-        public async Task<ActionResult> Put(string workflowid, int id, TaskCreateDTO taskCreateDTO)
-        {
- 
-            var existsWorkflow = await context.Workflows.AnyAsync(x => x.Id == workflowid);
-
-            if (!existsWorkflow)
-            {
-                return BadRequest($"Workflow with Id {workflowid} does not exist ");
-            }            
+        [HttpPut("{id}")] // api/voting/1 
+        public async Task<ActionResult> Put( string id, VotingCreateDTO votingCreateDTO)
+        { 
             
-            var exists = await context.Tasks.AnyAsync(x => x.Id == id);
+            var exists = await context.Votings.AnyAsync(x => x.Id == id);
 
             if (!exists)
             {
                 return NotFound();
             }
 
-            // Validate that the task belongs to the workflow - earring            
+            // Pending validate that the task belongs to the workflow - earring            
 
-            var task = mapper.Map<Entity.Task>(taskCreateDTO);          
-            task.Id=id;            
+            var voting = mapper.Map<Voting>(votingCreateDTO);          
+            voting.Id=id;            
 
-            context.Update(task);
+            context.Update(voting);
             await context.SaveChangesAsync();
             return Ok();
         }
 
 
 
-        [HttpPatch("{id:int}")]
-        public async Task<ActionResult> Patch(string workflowid, int id, JsonPatchDocument<TaskCreateDTO> patchDocument)
+        [HttpPatch("{id}")]
+        public async Task<ActionResult> Patch( string id, JsonPatchDocument<VotingCreateDTO> patchDocument)
         {
             if (patchDocument == null)
             {
                 return BadRequest();
-            }
+            }                       
 
-            var existsWorkflow = await context.Workflows.AnyAsync(x => x.Id == workflowid);
+            var votingDB = await context.Votings.FirstOrDefaultAsync(x => x.Id == id);
 
-            if (!existsWorkflow)
-            {
-                return BadRequest($"Workflow with Id {workflowid} does not exist ");
-            }                    
-
-            var taskDB = await context.Tasks.FirstOrDefaultAsync(x => x.Id == id);
-
-            if (taskDB == null)
+            if (votingDB == null)
             {
                 return NotFound();
             }
 
-            var taskCreateDTO = mapper.Map<TaskCreateDTO>(taskDB);
+            var votingCreateDTO = mapper.Map<VotingCreateDTO>(votingDB);
 
-            patchDocument.ApplyTo(taskCreateDTO, ModelState);
+            patchDocument.ApplyTo(votingCreateDTO, ModelState);
 
-            var isValid = TryValidateModel(taskCreateDTO);
+            var isValid = TryValidateModel(votingCreateDTO);
 
             if (!isValid)
             {
@@ -142,35 +108,27 @@ namespace webapi_nextflow.Controllers
 
             // Validate that the task belongs to the workflow - earring         
 
-            mapper.Map(taskCreateDTO, taskDB);
+            mapper.Map(votingCreateDTO, votingDB);
 
             await context.SaveChangesAsync();
             return NoContent();
         }
 
-        [HttpDelete("{id:int}")]
-        public async Task<ActionResult> Delete(string workflowid, int id)
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(string id)
         {
 
-            var existsWorkflow = await context.Workflows.AnyAsync(x => x.Id == workflowid);
-
-            if (!existsWorkflow)
-            {
-                return NotFound();
-            }                    
-
-            var exists = await context.Tasks.AnyAsync(x => x.Id == id);
+            var exists = await context.Votings.AnyAsync(x => x.Id == id);
 
             if (!exists)
             {
                 return NotFound();
             }
 
-            context.Remove(new Entity.Task() { Id = id });
+            context.Remove(new Voting() { Id = id });
             await context.SaveChangesAsync();
             return NoContent();
         }
-
 
     }
 }

@@ -14,12 +14,14 @@ public class AutoMapperProfiles : Profile
         
         CreateMap<GroupsCreateDTO, Group>();
         CreateMap<Group, GroupDTO>();
-
+        
         CreateMap<ItemCreateDTO,Item>();
         CreateMap<Item,ItemDTO>();
+        CreateMap<Item,ItemCreateDTO>(); // usin in method Patch
         
         CreateMap<TaskCreateDTO, Entity.Task>();            
         CreateMap<Entity.Task, TaskDTO>();
+        CreateMap<Entity.Task, TaskCreateDTO>();     // usin in method Patch        
                
         CreateMap<SpecificStatusCreateDTO, SpecificStatus>();            
         CreateMap<SpecificStatus, SpecificStatusDTO>();
@@ -32,12 +34,17 @@ public class AutoMapperProfiles : Profile
 
         CreateMap<StatusFlowItemCreateDTO, StatusFlowItem>();
         CreateMap<StatusFlowItem, StatusFlowItemDTO>();
+        CreateMap<StatusFlowItem, StatusFlowItemCreateDTO>();
 
         CreateMap<WorkFlowItemCreateDTO, WorkFlowItem>();
         CreateMap<WorkFlowItem, WorkFlowItemDTO>();
 
         CreateMap<TransitionCreateDTO, Transition>();
         CreateMap<Transition, TransitionDTO>();
+        
+        CreateMap<VotingCreateDTO, Voting>();
+        CreateMap<Voting, VotingDTO>();
+        CreateMap<Voting, VotingCreateDTO>(); // usin in method Patch
 
     }
 }

@@ -96,50 +96,6 @@ namespace webapi_nextflow.Controllers
         }
 
 
-
-        [HttpPatch("{id:int}")]
-        public async Task<ActionResult> Patch(string workflowid, int id, JsonPatchDocument<SpecificStatusCreateDTO> patchDocument)
-        {
-            if (patchDocument == null)
-            {
-                return BadRequest();
-            }
-
-            var existsWorkflow = await context.Workflows.AnyAsync(x => x.Id == workflowid);
-
-            if (!existsWorkflow)
-            {
-                return BadRequest($"Workflow with Id {workflowid} does not exist ");
-            }                    
-
-            var specificStatus = await context.SpecificStatus.FirstOrDefaultAsync(x => x.Id == id);
-
-            if (specificStatus == null)
-            {
-                return NotFound();
-            }
-
-            var specificStatusCreateDTO = mapper.Map<SpecificStatusCreateDTO>(specificStatus);
-
-            patchDocument.ApplyTo(specificStatusCreateDTO, ModelState);
-
-            var isValid = TryValidateModel(specificStatusCreateDTO);
-
-            if (!isValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            // Validate that the task belongs to the workflow - earring         
-
-            mapper.Map(specificStatusCreateDTO, specificStatus);
-
-            await context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(string workflowid, int id)
         {

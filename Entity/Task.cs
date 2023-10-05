@@ -36,7 +36,7 @@ namespace webapi_nextflow.Entity
         public string SpecificUser { get; set; }
 
         [Column(name: "specific_status_id")]
-        public int SpecificStatusId { get; set; }
+        public int? SpecificStatusId { get; set; }
 
         [ForeignKey("Id")]
         public  virtual Item Item { get; set; } = null!;

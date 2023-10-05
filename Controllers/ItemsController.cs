@@ -39,9 +39,9 @@ namespace webapi_nextflow.Controllers
        // [HttpGet("nextitem/{id:int}/{event:int}")]
         
         [HttpGet("{id:int}")] 
-        public async Task<ActionResult<ItemDTO>> Get(int id)
+        public async Task<ActionResult<ItemDTO>> Get(string workflowid, int id)
         {
-            var item = await context.Items.FirstOrDefaultAsync(x=>x.Id==id);
+            var item = await context.Items.FirstOrDefaultAsync(x=>x.Id==id && x.WorkflowId == workflowid);
 
             if (item==null)
             {
@@ -82,7 +82,7 @@ namespace webapi_nextflow.Controllers
                 return BadRequest($"Workflow with Id {workflowid} does not exist ");
             }            
             
-            var exists = await context.Items.AnyAsync(x => x.Id == id);
+            var exists = await context.Items.AnyAsync(x => x.Id == id && x.WorkflowId == workflowid);
 
             if (!exists)
             {
@@ -116,7 +116,7 @@ namespace webapi_nextflow.Controllers
                 return BadRequest($"Workflow with Id {workflowid} does not exist ");
             }                    
 
-            var itemDB = await context.Items.FirstOrDefaultAsync(x => x.Id == id);
+            var itemDB = await context.Items.FirstOrDefaultAsync(x => x.Id == id && x.WorkflowId == workflowid );
 
             if (itemDB == null)
             {
@@ -151,7 +151,7 @@ namespace webapi_nextflow.Controllers
                 return NotFound();
             }                    
 
-            var exists = await context.Items.AnyAsync(x => x.Id == id);
+            var exists = await context.Items.AnyAsync(x => x.Id == id && x.WorkflowId == workflowid);
 
             if (!exists)
             {
@@ -162,7 +162,6 @@ namespace webapi_nextflow.Controllers
             await context.SaveChangesAsync();
             return NoContent();
         }
-
 
 
     }

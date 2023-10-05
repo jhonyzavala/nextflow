@@ -12,8 +12,8 @@ using webapi_nextflow;
 namespace webapi_nextflow.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230912150629_creation-01")]
-    partial class creation01
+    [Migration("20231005231858_cretion-01")]
+    partial class cretion01
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -87,11 +87,8 @@ namespace webapi_nextflow.Migrations
             modelBuilder.Entity("webapi_nextflow.Entity.Event", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .IsRequired()
