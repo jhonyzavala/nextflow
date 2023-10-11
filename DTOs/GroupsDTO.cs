@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace webapi_nextflow.DTOs;
 
-public class GroupDTO
+public class GroupsDTO
 {
     
     public int Id { get; set; }

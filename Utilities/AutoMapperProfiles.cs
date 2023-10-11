@@ -13,7 +13,7 @@ public class AutoMapperProfiles : Profile
         CreateMap<Workflow, WorkflowDTO>();
         
         CreateMap<GroupsCreateDTO, Group>();
-        CreateMap<Group, GroupDTO>();
+        CreateMap<Group, GroupsDTO>();
         
         CreateMap<ItemCreateDTO,Item>();
         CreateMap<Item,ItemDTO>();

@@ -21,7 +21,7 @@ namespace webapi_nextflow.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<GroupDTO>>> Get(string workflowid)
+        public async Task<ActionResult<List<GroupsDTO>>> Get(string workflowid)
         {
             var exists = await context.Workflows.AnyAsync(x => x.Id == workflowid);
 
@@ -33,11 +33,11 @@ namespace webapi_nextflow.Controllers
             var grops = await context.Groups.Where(x=>x.WorkflowId==workflowid).ToListAsync();
 
             
-            return mapper.Map<List<GroupDTO>>(grops);     
+            return mapper.Map<List<GroupsDTO>>(grops);     
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<GroupDTO>> Get(string workflowid, int id)
+        public async Task<ActionResult<GroupsDTO>> Get(string workflowid, int id)
         {
             
             var exists = await context.Workflows.AnyAsync(x => x.Id == workflowid);
@@ -54,7 +54,7 @@ namespace webapi_nextflow.Controllers
                 return NotFound();
             }
           
-            return mapper.Map<GroupDTO>(group);
+            return mapper.Map<GroupsDTO>(group);
         }
 
         [HttpPost]
