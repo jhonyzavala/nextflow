@@ -29,10 +29,10 @@ namespace webapi_nextflow.Controllers
             {
                 return BadRequest($"Workflow with Id {workflowid} does not exist ");
             }
-
-
-            var workFlowItems = await context.WorkFlowItems.ToListAsync();
-
+            
+            // Pending test filer
+            var workFlowItems = await context.WorkFlowItems.Where(x=>x.Transition.CurrentItemNavigation.WorkflowId==workflowid).ToListAsync();
+            // Pending filter owner
                 
             return mapper.Map<List<WorkFlowItemDTO>>(workFlowItems);       
         }

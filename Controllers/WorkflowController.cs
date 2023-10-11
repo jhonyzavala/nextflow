@@ -51,6 +51,8 @@ namespace webapi_nextflow.Controllers
 
             workflow.Id = Guid.NewGuid().ToString();  
 
+            // Pending assign owner
+
             context.Add(workflow);
             await context.SaveChangesAsync();
 
@@ -62,12 +64,13 @@ namespace webapi_nextflow.Controllers
         {            
 
             var exists = await context.Workflows.AnyAsync(x => x.Id == id);
+            // Pending valid owner
 
             if (!exists)
             {
                 return NotFound();
             }
-
+           
             var workflow = mapper.Map<Workflow>(workflowCreateDTO);          
             workflow.Id=id; 
 
@@ -80,6 +83,7 @@ namespace webapi_nextflow.Controllers
         public async Task<ActionResult> Delete(string id)
         {
             var exists = await context.Workflows.AnyAsync(x => x.Id == id);
+            // Pending valid owner
 
             if (!exists)
             {

@@ -8,28 +8,13 @@ namespace webapi_nextflow.DTOs;
 public partial class WorkFlowItemDTO
 {
     
-    public string Id { get; set; } = null!;
-
-    [Required]
-    public int TransitionId { get; set; }
-
-    [Required]
-    public string Object { get; set; } = null!;
-
-    [Required]
+    public string Id { get; set; } 
+    public int TransitionId { get; set;}
+     public string Object { get; set; }
     public DateTime StarDate { get; set; }
-
     public DateTime? EndDate { get; set; }
-
-    [Required]
     public int StatusItemFlowId { get; set; }
-
     public bool? EvaluatedVote { get; set; }
-
-    [StringLength(maximumLength:128)]
     public string VotingId { get; set; }
-
-    [StringLength(maximumLength:3000)]
     public string Comment { get; set; }
-
 }

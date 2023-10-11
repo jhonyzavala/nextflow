@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace webapi_nextflow.Migrations
 {
     /// <inheritdoc />
-    public partial class cretion01 : Migration
+    public partial class migration01 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -231,7 +231,8 @@ namespace webapi_nextflow.Migrations
                         name: "FK_items_stages_stage_id",
                         column: x => x.stage_id,
                         principalTable: "stages",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_items_workflows_workflow_id",
                         column: x => x.workflow_id,
@@ -268,7 +269,7 @@ namespace webapi_nextflow.Migrations
                     participant_type_id = table.Column<int>(type: "int", nullable: false),
                     group_id = table.Column<int>(type: "int", nullable: true),
                     specific_user = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
-                    specific_status_id = table.Column<int>(type: "int", nullable: false)
+                    specific_status_id = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -300,8 +301,7 @@ namespace webapi_nextflow.Migrations
                         name: "FK_tasks_specific_status_specific_status_id",
                         column: x => x.specific_status_id,
                         principalTable: "specific_status",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -321,7 +321,8 @@ namespace webapi_nextflow.Migrations
                         name: "FK_transition_events_event_id",
                         column: x => x.event_id,
                         principalTable: "events",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_transition_items_current_item",
                         column: x => x.current_item,

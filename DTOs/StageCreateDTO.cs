@@ -3,11 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace webapi_nextflow.DTOs
 {
-    public class StageDTO
+    public class StageCreateDTO
     {
-        [Column(name: "id")]
-        public int Id{ get; set; }
-
+       
         [Required]
         public string Name { get; set; }
 
@@ -16,10 +14,7 @@ namespace webapi_nextflow.DTOs
 
         [Required]
         public int Order { get; set; }
-
-        [Required]
-        [StringLength(maximumLength: 128)]
-        public string WorkflowId { get; set; }
+       
 
     }
 }

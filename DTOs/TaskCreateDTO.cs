@@ -29,7 +29,7 @@ namespace webapi_nextflow.DTOs
         [StringLength(maximumLength: 128)]
         public string SpecificUser { get; set; }
         
-        public int SpecificStatusId { get; set; }
+        public int? SpecificStatusId { get; set; }
 
     }
 }

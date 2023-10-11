@@ -46,4 +46,6 @@ public partial class WorkFlowItem
 
     public virtual Voting Voting { get; set; }
 
+    public virtual Transition Transition { get; set; }
+
 }

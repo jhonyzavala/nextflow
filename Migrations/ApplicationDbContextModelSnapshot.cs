@@ -372,7 +372,7 @@ namespace webapi_nextflow.Migrations
                         .HasColumnType("int")
                         .HasColumnName("participant_type_id");
 
-                    b.Property<int>("SpecificStatusId")
+                    b.Property<int?>("SpecificStatusId")
                         .HasColumnType("int")
                         .HasColumnName("specific_status_id");
 
@@ -664,9 +664,7 @@ namespace webapi_nextflow.Migrations
 
                     b.HasOne("webapi_nextflow.Entity.SpecificStatus", "SpecificStatus")
                         .WithMany("Tasks")
-                        .HasForeignKey("SpecificStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SpecificStatusId");
 
                     b.Navigation("ApprovalType");
 

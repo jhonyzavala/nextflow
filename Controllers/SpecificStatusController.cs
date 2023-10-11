@@ -61,6 +61,8 @@ namespace webapi_nextflow.Controllers
             }
 
             var specificStatus = mapper.Map<SpecificStatus>(specificStatusCreateDTO);                
+            specificStatus.WorkflowId = workflowid;
+            
             context.Add(specificStatus);
             await context.SaveChangesAsync();
 
