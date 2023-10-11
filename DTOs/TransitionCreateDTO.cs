@@ -8,8 +8,7 @@ namespace webapi_nextflow.DTOs;
 
 public class TransitionCreateDTO
 {    
-    public int Id { get; set; }
-
+   
     [Required]
     public int CurrentItem { get; set; }
 

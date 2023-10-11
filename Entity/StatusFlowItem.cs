@@ -10,6 +10,7 @@ public partial class StatusFlowItem
 {
     
     [Column(name: "id")]
+    [DatabaseGenerated(DatabaseGeneratedOption.None)]
     public int Id { get; set; }
 
     [Required]
