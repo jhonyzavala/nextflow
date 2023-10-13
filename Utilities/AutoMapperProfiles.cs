@@ -31,10 +31,8 @@ public class AutoMapperProfiles : Profile
 
         CreateMap<GroupsUserCreateDTO, GroupsUser>();
         CreateMap<GroupsUser, GroupsUserDTO>();
-
-        CreateMap<StatusFlowItemCreateDTO, StatusFlowItem>();
+ 
         CreateMap<StatusFlowItem, StatusFlowItemDTO>();
-        CreateMap<StatusFlowItem, StatusFlowItemCreateDTO>();
 
         CreateMap<WorkFlowItemCreateDTO, WorkFlowItem>();
         CreateMap<WorkFlowItem, WorkFlowItemDTO>();
