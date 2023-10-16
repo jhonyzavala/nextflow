@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using webapi_nextflow.DTOs;
 using webapi_nextflow.Entity;
 
 namespace webapi_nextflow.Controllers
@@ -9,10 +11,12 @@ namespace webapi_nextflow.Controllers
     public class GroupsUsersController : ControllerBase
     {
         private readonly ApplicationDbContext context;
+        private readonly IMapper mapper;
 
-        public GroupsUsersController( ApplicationDbContext context)
+        public GroupsUsersController( ApplicationDbContext context, IMapper mapper)
         {
             this.context = context;
+            this.mapper = mapper;
         }
 
         [HttpGet]
@@ -21,17 +25,17 @@ namespace webapi_nextflow.Controllers
             return await context.GroupsUsers.ToListAsync();
         }
 
-        [HttpGet("{userid}")]
-        public async Task<ActionResult<GroupsUser>> Get(string userid)
+        [HttpGet("{groupid:int}")]
+        public async Task<ActionResult<GroupsUserDTO>> Get(int groupid)
         {
-            var groupsUser = await context.GroupsUsers.FirstOrDefaultAsync(x=>x.UserId==userid);
+            var groupsUser = await context.GroupsUsers.FirstOrDefaultAsync(x=>x.GroupId==groupid);
 
             if (groupsUser==null)
             {
                 return NotFound();
             }
 
-            return Ok(groupsUser);
+            return mapper.Map<GroupsUserDTO>(groupsUser);      
         }
 
         [HttpPost]
