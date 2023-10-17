@@ -39,8 +39,9 @@ namespace webapi_nextflow.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post(GroupsUser groupsUser)
+        public async Task<ActionResult> Post(GroupsUserCreateDTO groupsUserCreateDTO)
         {
+            var groupsUser = mapper.Map<GroupsUser>(groupsUserCreateDTO);
             context.Add(groupsUser);
             await context.SaveChangesAsync();
 
