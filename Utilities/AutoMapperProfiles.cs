@@ -44,6 +44,9 @@ public class AutoMapperProfiles : Profile
         CreateMap<Voting, VotingDTO>();
         CreateMap<Voting, VotingCreateDTO>(); // usin in method Patch
 
+        CreateMap<CollaboratorCreateDTO, Collaborator>();
+        CreateMap<Collaborator, CollaboratorDTO>();
+
     }
 }
 
