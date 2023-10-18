@@ -47,6 +47,9 @@ public class AutoMapperProfiles : Profile
         CreateMap<CollaboratorCreateDTO, Collaborator>();
         CreateMap<Collaborator, CollaboratorDTO>();
 
+        CreateMap<ParticipantCreateDTO, Participant>();
+        CreateMap<Participant, ParticipantDTO>();
+
     }
 }
 
