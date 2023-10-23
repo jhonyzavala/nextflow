@@ -30,14 +30,12 @@ namespace webapi_nextflow.Controllers
                 return BadRequest($"Workflow with Id {workflowid} does not exist ");
             }
 
-
             var tasks = await (
                                     from a in context.Tasks
                                     join b in context.Items on a.Id equals b.Id
                                     where b.WorkflowId == workflowid
                                     select a            
                                 ).ToListAsync();
-
                 
             return mapper.Map<List<TaskDTO>>(tasks);       
         }
@@ -46,11 +44,11 @@ namespace webapi_nextflow.Controllers
         [HttpGet("{id:int}")] 
         public async Task<ActionResult<TaskDTO>> Get(string workflowid, int id)
         {
-            var exists = await context.Workflows.AnyAsync(x => x.Id == workflowid);
+            var exists = await context.Workflows.AnyAsync(x => x.Id == workflowid && x.Owner==getUser());
 
             if (!exists)
             {
-                return BadRequest($"Workflow with Id {workflowid} does not exist ");
+                return BadRequest($"Workflow with Id {workflowid} does not exist or not the owner");
             }            
             
             // Check Sintaxy
@@ -179,6 +177,10 @@ namespace webapi_nextflow.Controllers
             return NoContent();
         }
 
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public string getUser() {
+            return "jhony.zavala@pemex.com";
+        }  
 
     }
 }

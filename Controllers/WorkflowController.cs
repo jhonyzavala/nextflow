@@ -24,7 +24,7 @@ namespace webapi_nextflow.Controllers
         public async Task<ActionResult<List<WorkflowDTO>>> Get()
         {
             // filtered by the author
-            var workflows = await context.Workflows.ToListAsync();
+            var workflows = await context.Workflows.Where(x=>x.Owner==getUser()).ToListAsync();
 
             return mapper.Map<List<WorkflowDTO>>(workflows);
         }
@@ -32,7 +32,7 @@ namespace webapi_nextflow.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<WorkflowDTO>> Get( string id)
         {
-            var workflow = await context.Workflows.Include(a=>a.Items).FirstOrDefaultAsync(x => x.Id == id);
+            var workflow = await context.Workflows.Include(a=>a.Items).FirstOrDefaultAsync(x => x.Id == id && x.Owner==getUser());
 
             if (workflow ==null)
             {
@@ -94,6 +94,11 @@ namespace webapi_nextflow.Controllers
             await context.SaveChangesAsync();
             return Ok();
         }
+
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public string getUser() {
+            return "jhony.zavala@pemex.com";
+        }  
 
 
     }

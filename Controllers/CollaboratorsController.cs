@@ -8,7 +8,7 @@ using webapi_nextflow.Utilities;
 namespace webapi_nextflow.Controllers
 {
     [ApiController]    
-    [Route("api/workflows/{workflowid}/collaborators")]
+    [Route("api/workflows/{workflowid}/collaborators")]    
     public class CollaboratorsController : ControllerBase
     {
         private readonly ApplicationDbContext context;
@@ -110,10 +110,9 @@ namespace webapi_nextflow.Controllers
             return Ok();
         }  
 
+        [ApiExplorerSettings(IgnoreApi = true)]        
         public string getUser() {
-
             return "jhony.zavala@pemex.com";
-
         }  
              
 

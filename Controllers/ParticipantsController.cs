@@ -110,6 +110,7 @@ namespace webapi_nextflow.Controllers
             return Ok();
         }  
 
+        [ApiExplorerSettings(IgnoreApi = true)]
         public string getUser() {
 
             return "jhony.zavala@pemex.com";
