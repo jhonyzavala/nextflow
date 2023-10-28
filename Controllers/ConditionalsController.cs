@@ -5,7 +5,7 @@ using webapi_nextflow.Entity;
 namespace webapi_nextflow.Controllers
 {
     [ApiController]
-    [Route("api/condicionals")]
+    [Route("api/workflows/{workflowid}/condicionals")]
     public class ConditionalsController : ControllerBase
     {
         private readonly ApplicationDbContext context;
@@ -16,9 +16,9 @@ namespace webapi_nextflow.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Conditional>>> Get()
+        public async Task<ActionResult<List<Conditional>>> Get(string workflowid)
         {
-            return await context.Conditionals.ToListAsync();
+            return await context.Conditionals.Where(x=>x.IdNavigation.WorkflowId== workflowid ).ToListAsync();
         }
 
         [HttpGet("{id:int}")]

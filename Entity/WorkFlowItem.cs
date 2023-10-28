@@ -13,8 +13,10 @@ public partial class WorkFlowItem
     public string Id { get; set; } = null!;
 
     [Required]
-    [Column(name:"transition_id")]
-    public int TransitionId { get; set; }
+    [Column(name:"task_id")]
+    public int TaskId { get; set; }
+
+    public string UserId { get; set; }
 
     [Required]
     [Column(name:"object")]    
@@ -46,6 +48,7 @@ public partial class WorkFlowItem
 
     public virtual Voting Voting { get; set; }
 
-    public virtual Transition Transition { get; set; }
+    public virtual Task Task { get; set; }
+     
 
 }
