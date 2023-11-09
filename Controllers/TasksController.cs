@@ -23,11 +23,11 @@ namespace webapi_nextflow.Controllers
         [HttpGet]
         public async Task<ActionResult<List<TaskDTO>>> Get(string workflowid)
         {
-            var exists = await context.Workflows.AnyAsync(x => x.Id == workflowid);
+            var exists = await context.Workflows.AnyAsync(x => x.Id == workflowid && x.Owner==getUser());
 
             if (!exists)
             {
-                return BadRequest($"Workflow with Id {workflowid} does not exist ");
+                return BadRequest($"Workflow with Id {workflowid} does not exist or not the owner ");
             }
 
             var tasks = await (
@@ -44,7 +44,7 @@ namespace webapi_nextflow.Controllers
         [HttpGet("{id:int}")] 
         public async Task<ActionResult<TaskDTO>> Get(string workflowid, int id)
         {
-            var exists = await context.Workflows.AnyAsync(x => x.Id == workflowid && x.Owner==getUser());
+            var exists = await context.Workflows.AnyAsync(x => x.Id == workflowid && x.Owner==getUser() );
 
             if (!exists)
             {
@@ -66,11 +66,11 @@ namespace webapi_nextflow.Controllers
         public async Task<ActionResult> Post(string workflowid, TaskCreateDTO taskCreateDTO)
         {                        
 
-            var existsWorkflow = await context.Workflows.AnyAsync(x => x.Id == workflowid);
+            var existsWorkflow = await context.Workflows.AnyAsync(x => x.Id == workflowid && x.Owner==getUser() );
 
             if (!existsWorkflow)
             {
-                return BadRequest($"Workflow with Id {workflowid} does not exist ");
+                return BadRequest($"Workflow with Id {workflowid} does not exist or not the owner ");
             }
 
             var task=mapper.Map<Entity.Task>(taskCreateDTO);                
@@ -85,23 +85,20 @@ namespace webapi_nextflow.Controllers
         public async Task<ActionResult> Put(string workflowid, int id, TaskCreateDTO taskCreateDTO)
         {
  
-            var existsWorkflow = await context.Workflows.AnyAsync(x => x.Id == workflowid);
+            var existsWorkflow = await context.Workflows.AnyAsync(x => x.Id == workflowid && x.Owner==getUser() );
 
             if (!existsWorkflow)
             {
-                return BadRequest($"Workflow with Id {workflowid} does not exist ");
-            }            
-            
-            // Check Sintaxy
+                return BadRequest($"Workflow with Id {workflowid} does not exist or not the owner ");
+            }
+       
             var exists = await context.Tasks.Include(x=>x.Item).AnyAsync(x => x.Id == id && x.Item.WorkflowId == workflowid);
 
             if (!exists)
             {
                 return NotFound();
             }
-
-            // Validate that the task belongs to the workflow - earring            
-
+       
             var task = mapper.Map<Entity.Task>(taskCreateDTO);          
             task.Id=id;            
 
@@ -109,7 +106,6 @@ namespace webapi_nextflow.Controllers
             await context.SaveChangesAsync();
             return Ok();
         }
-
 
 
         [HttpPatch("{id:int}")]
@@ -120,15 +116,15 @@ namespace webapi_nextflow.Controllers
                 return BadRequest();
             }
 
-            var existsWorkflow = await context.Workflows.AnyAsync(x => x.Id == workflowid);
+            var existsWorkflow = await context.Workflows.AnyAsync(x => x.Id == workflowid && x.Owner==getUser() );
 
             if (!existsWorkflow)
             {
-                return BadRequest($"Workflow with Id {workflowid} does not exist ");
-            }                    
+                return BadRequest($"Workflow with Id {workflowid} does not exist or not the owner ");
+            }               
 
-            // Check Sintaxy
-            var taskDB = await context.Tasks.Include(x=>x.Item).FirstOrDefaultAsync(x => x.Id == id && x.Item.WorkflowId == workflowid);
+            
+            var taskDB = await context.Tasks.FirstOrDefaultAsync(x => x.Id == id && x.Item.WorkflowId == workflowid);
 
             if (taskDB == null)
             {
@@ -146,8 +142,6 @@ namespace webapi_nextflow.Controllers
                 return BadRequest(ModelState);
             }
 
-            // Validate that the task belongs to the workflow - earring         
-
             mapper.Map(taskCreateDTO, taskDB);
 
             await context.SaveChangesAsync();
@@ -158,12 +152,12 @@ namespace webapi_nextflow.Controllers
         public async Task<ActionResult> Delete(string workflowid, int id)
         {
 
-            var existsWorkflow = await context.Workflows.AnyAsync(x => x.Id == workflowid);
+            var existsWorkflow = await context.Workflows.AnyAsync(x => x.Id == workflowid && x.Owner==getUser() );
 
             if (!existsWorkflow)
             {
-                return NotFound();
-            }                    
+                return BadRequest($"Workflow with Id {workflowid} does not exist or not the owner ");
+            }                               
 
             var exists = await context.Tasks.AnyAsync(x => x.Id == id && x.Item.WorkflowId == workflowid);
 

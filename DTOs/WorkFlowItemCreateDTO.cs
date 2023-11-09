@@ -9,21 +9,23 @@ public partial class WorkFlowItemCreateDTO
 {
     
    // public string Id { get; set; } = null!;
+     
+    [Required]    
+    public int ItemId { get; set; }
 
-    [Required]
-    public int TransitionId { get; set; }
+    public string UserId { get; set; }
 
-    [Required]
+    [Required]    
     public string Object { get; set; } = null!;
 
-    [Required]
+    [Required]    
     public DateTime StarDate { get; set; }
-
+    
     public DateTime? EndDate { get; set; }
 
     [Required]
     public int StatusItemFlowId { get; set; }
-
+    
     public bool? EvaluatedVote { get; set; }
 
     [StringLength(maximumLength:128)]
