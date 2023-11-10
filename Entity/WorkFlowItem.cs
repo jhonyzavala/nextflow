@@ -18,6 +18,7 @@ public partial class WorkFlowItem
 
     [Required]
     [Column(name:"user_id")]
+    [StringLength(maximumLength:128)]
     public string UserId { get; set; }
 
     [Required]

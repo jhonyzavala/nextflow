@@ -50,6 +50,9 @@ public class AutoMapperProfiles : Profile
         CreateMap<ParticipantCreateDTO, Participant>();
         CreateMap<Participant, ParticipantDTO>();
 
+        CreateMap<ConditionalCreteDTO, Conditional>();
+        CreateMap<Conditional, ConditionalDTO>();
+
     }
 }
 

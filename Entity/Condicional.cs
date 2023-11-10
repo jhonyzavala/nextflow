@@ -16,6 +16,6 @@ namespace webapi_nextflow.Entity
         public string Expression { get; set; } = null!;
 
         [ForeignKey("Id")]
-        public virtual Item IdNavigation { get; set; } = null!;
+        public virtual Item Item { get; set; } = null!;
     }
 }
