@@ -16,7 +16,7 @@ namespace webapi_nextflow.Controllers
         }
 
         [HttpPost("blue/run")]
-        public async Task<ActionResult> Post(string workflowid, string workFlowItemId, string userId, string JsonObject, int statusId, string comment  )
+        public async Task<ActionResult<Item>> Post(string workflowid, string workFlowItemId, string userId, string JsonObject, int statusId, string comment  )
         {            
 
             var exists = await context.Workflows.AnyAsync(x => x.Id == workflowid && x.Owner==getUser());
@@ -30,12 +30,13 @@ namespace webapi_nextflow.Controllers
 
 
             // Obtiene el estado actual
+            var task= workFlowItems.Item;
 
             //verifica si hay tareas en paralelo pendientes
 
             //si no hay tareas en paralelo pendientes,  despacha las tareas siguientes
             
-           return Ok();
+           return task;
         }
 
 
@@ -46,3 +47,4 @@ namespace webapi_nextflow.Controllers
 
     }
 }
+
