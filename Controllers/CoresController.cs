@@ -15,8 +15,8 @@ namespace webapi_nextflow.Controllers
             this.context = context;
         }
 
-        [HttpPost("blue/run")]
-        public async Task<ActionResult<Item>> Post(string workflowid, string workFlowItemId, string userId, string JsonObject, int statusId, string comment  )
+        [HttpPost("blue/nextitem")]
+        public async Task<ActionResult> Post(string workflowid, string workFlowItemId, string userId, string JsonObject, int statusId, string comment  )
         {            
 
             var exists = await context.Workflows.AnyAsync(x => x.Id == workflowid && x.Owner==getUser());
@@ -30,13 +30,20 @@ namespace webapi_nextflow.Controllers
 
 
             // Obtiene el estado actual
-            var task= workFlowItems.Item;
-
-            //verifica si hay tareas en paralelo pendientes
-
-            //si no hay tareas en paralelo pendientes,  despacha las tareas siguientes
+            var item= workFlowItems.Item;
             
-           return task;
+            //verifica si hay tareas en paralelo pendientes
+            //var transition = await context.Transitions.Where(a=>a.CurrentItem==item.Id).Select(z=>z.NextItem).ToListAsync();
+            //if ( transition.Count()>1 ) {                
+              //  var parallelExist = await context.WorkFlowItems.Where(x=>transition.Contains(x.ItemId)).ToListAsync(); 
+            //}
+            //else {
+
+            
+                //si no hay tareas en paralelo pendientes,  despacha las tareas siguientes
+           // }
+            
+           return Ok();
         }
 
 
