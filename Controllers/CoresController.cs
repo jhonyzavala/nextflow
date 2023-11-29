@@ -31,17 +31,21 @@ namespace webapi_nextflow.Controllers
 
             // Obtiene el estado actual
             var item= workFlowItems.Item;
-            
-            //verifica si hay tareas en paralelo pendientes
-            //var transition = await context.Transitions.Where(a=>a.CurrentItem==item.Id).Select(z=>z.NextItem).ToListAsync();
-            //if ( transition.Count()>1 ) {                
-              //  var parallelExist = await context.WorkFlowItems.Where(x=>transition.Contains(x.ItemId)).ToListAsync(); 
-            //}
-            //else {
+            bool lblParallelPending = false;            
 
+            var transition = await context.Transitions.Where(a=>a.CurrentItem==item.Id).Select(z=>z.NextItem).ToListAsync();
+
+            if ( transition.Count()>1 ) {  //si hay tareas en paralelo                
+                var parallelPending = await context.WorkFlowItems.Where(x=>transition.Contains(x.ItemId) && x.EndDate!=null).ToListAsync(); 
+                if ( parallelPending.Count()>0 ){
+                    lblParallelPending=true;
+                }
+            }
             
-                //si no hay tareas en paralelo pendientes,  despacha las tareas siguientes
-           // }
+            if( !lblParallelPending) {
+
+            }
+            
             
            return Ok();
         }
