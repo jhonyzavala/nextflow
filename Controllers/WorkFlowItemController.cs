@@ -31,7 +31,7 @@ namespace webapi_nextflow.Controllers
             }
            
            
-           var workFlowItems = await context.WorkFlowItems.Where(x=>x.Item.WorkflowId==workflowid).ToListAsync();
+           var workFlowItems = await context.WorkFlowItems.Where(x=>x.Transition.CurrentItemNavigation.WorkflowId==workflowid).ToListAsync();
           
                 
             return mapper.Map<List<WorkFlowItemDTO>>(workFlowItems);       
@@ -49,7 +49,7 @@ namespace webapi_nextflow.Controllers
                 return BadRequest($"Workflow with Id {workflowid} does not exist  or not the owner ");
             }
                        
-            
+             // * * * * * * 
             var workflowitem = await context.WorkFlowItems.FirstOrDefaultAsync(x=>x.Id==id);
 
             if ( workflowitem==null )
@@ -72,7 +72,8 @@ namespace webapi_nextflow.Controllers
                 return BadRequest($"Workflow with Id {workflowid} does not exist  or not the owner ");
             }
 
-            var workFlowItems = await context.WorkFlowItems.Where(x=>x.UserId==userId && x.Item.WorkflowId==workflowid).ToListAsync(); 
+            // * * * * * * 
+            var workFlowItems = await context.WorkFlowItems.Where(x=>x.UserId==userId && x.Transition.CurrentItemNavigation.WorkflowId==workflowid).ToListAsync(); 
                 
             return mapper.Map<List<WorkFlowItemDTO>>(workFlowItems);             
                        
@@ -118,7 +119,7 @@ namespace webapi_nextflow.Controllers
                 return BadRequest($"Workflow with Id {workflowid} does not exist or not the owner");
             }            
             
-            var exists = await context.WorkFlowItems.AnyAsync(x => x.Id == id && x.Item.WorkflowId==workflowid);
+            var exists = await context.WorkFlowItems.AnyAsync(x => x.Id == id && x.Transition.CurrentItemNavigation.WorkflowId==workflowid);
 
             if (!exists)
             {
@@ -149,7 +150,7 @@ namespace webapi_nextflow.Controllers
                 return BadRequest($"Workflow with Id {workflowid} does not exist or not the owner");
             }            
 
-            var workFlowItemDB = await context.WorkFlowItems.FirstOrDefaultAsync(x => x.Id == id && x.Item.WorkflowId==workflowid);
+            var workFlowItemDB = await context.WorkFlowItems.FirstOrDefaultAsync(x => x.Id == id && x.Transition.CurrentItemNavigation.WorkflowId==workflowid);
 
             if (workFlowItemDB == null)
             {
@@ -184,7 +185,7 @@ namespace webapi_nextflow.Controllers
             }          
             
 
-            var exists = await context.WorkFlowItems.AnyAsync(x => x.Id == id && x.Item.WorkflowId==workflowid );
+            var exists = await context.WorkFlowItems.AnyAsync(x => x.Id == id && x.Transition.CurrentItemNavigation.WorkflowId==workflowid );
 
             if (!exists)
             {

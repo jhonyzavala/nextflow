@@ -28,20 +28,22 @@ namespace webapi_nextflow.Controllers
 
             var workFlowItems = await context.WorkFlowItems.FirstOrDefaultAsync(x=>x.Id==workFlowItemId);
 
+            // Note : Validate the structure of the object, so that its content is not null, every object must have an id
 
-            // Obtiene el estado actual
-            var item= workFlowItems.Item;
+    
             bool lblParallelPending = false;            
 
-            var transition = await context.Transitions.Where(a=>a.CurrentItem==item.Id).Select(z=>z.NextItem).ToListAsync();
+            var transitionIds = await context.Transitions.Where(a=>a.CurrentItem== workFlowItems.Transition.CurrentItem).Select(z=>z.Id).ToListAsync();
 
-            if ( transition.Count()>1 ) {  //si hay tareas en paralelo                
-                var parallelPending = await context.WorkFlowItems.Where(x=>transition.Contains(x.ItemId) && x.EndDate!=null).ToListAsync(); 
-                if ( parallelPending.Count()>0 ){
+            if ( transitionIds.Count()>1 ) {  //if there are task in parallel                
+                                
+                var parallelTask = await context.WorkFlowItems.Where(x=>transitionIds.Contains(x.TransitionId) && x.EndDate!=null).ToListAsync();                 
+                //Consider the object
+                if ( parallelTask.Count()>0 ){
                     lblParallelPending=true;
                 }
             }
-            
+
             if( !lblParallelPending) {
 
             }
